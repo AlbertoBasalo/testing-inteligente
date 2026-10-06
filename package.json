@@ -1,6 +1,6 @@
 {
-  "name": "lab-testing-inteligente",
-  "description": "Testing Inteligente Laboratory",
+  "name": "testing-inteligente",
+  "description": "Testing Inteligente",
   "author": {
     "name": "Alberto Basalo",
     "url": "https://albertobasalo.dev"
@@ -12,13 +12,6 @@
   "version": "0.7.0",
   "private": true,
   "scripts": {
-    "start": "",
-    "test": "",
-    "setup": "",
-    "reset": "",
-    "lint": "",
-    "unit": "",
-    "format": "",
-    "quality": ""
+    "start": ""
   }
 }
