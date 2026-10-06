@@ -1,4 +1,4 @@
-import applicationPackage from "../../../package.json";
+import applicationPackage from "../../../../package.json";
 
 interface SystemPackage {
   name: string;

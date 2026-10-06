@@ -5,11 +5,11 @@
   "type": "module",
   "scripts": {
     "start": "node server.ts",
+    "test": "node --test src/**/*.test.ts",
     "build": "vite build",
     "lint": "oxlint src server.ts",
     "format": "oxfmt .",
     "upgrade": "ncu -u && npm install",
-    "unit": "node --test src/**/*.test.ts",
     "quality": "oxlint -c .oxlint.quality.json src server.ts"
   },
   "dependencies": {
