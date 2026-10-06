@@ -12,6 +12,7 @@
   "version": "0.7.0",
   "private": true,
   "scripts": {
-    "start": ""
+    "start": "node scripts/start.mjs",
+    "reset": "node scripts/reset.mjs"
   }
 }
