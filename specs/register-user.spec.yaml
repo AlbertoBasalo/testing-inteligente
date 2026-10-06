@@ -1,0 +1,78 @@
+requirements:
+  - id: R0001
+    title: Register a user with valid data
+    statement: >
+      WHEN a user submits valid registration data,
+      the system SHALL register the user.
+
+    scenarios:
+      - id: S001
+        name: Successful registration
+
+        preconditions:
+          - No user exists with email <email>
+
+        data:
+          username: John Doe
+          email: john@example.com
+          password: SecurePassword123!        
+
+        GIVEN: The user is not registered
+        WHEN: The user submits valid registration data
+        THEN: The user is registered successfully and receives a confirmation
+
+  - id: R0002
+    title: Reject registration with an existing email
+    statement: >
+      IF a user attempts to register with an already registered email,
+      THEN the system SHALL reject the registration and display an error message.
+    description: >
+      Ensure that the same email address cannot be registered more than once.
+
+    scenarios:
+      - id: S001
+        name: Registration with an existing email
+
+        setup:
+          - Ensure no user exists with email <email>
+          - Create a user with username <username> and email <email>
+
+        data:
+          username: Existing User
+          email: already_taken@example.com
+          password: SecurePassword123!
+          expected_error: Email already registered
+
+        GIVEN: A registered user exists with email <email>
+        WHEN: Another registration is attempted with email <email>
+        THEN: The registration fails and the system returns <expected_error>
+
+
+  - id: R0003
+    title: Reject registration with invalid data
+    statement: >
+      IF a user submits invalid registration data,
+      THEN the system SHALL reject the registration and return a validation error.
+    description: >
+      Ensure the system prevents registration when a password has fewer than four characters
+      or required data does not satisfy validation rules.
+
+    scenarios:
+      - id: S001
+        name: Registration with invalid data
+
+        preconditions:
+          - The user is not registered
+
+        examples:
+          - field: email
+            value: invalid-email-format
+            expected_error: Invalid email address
+
+          - field: password
+            value: "123"
+            expected_error: Password too short
+
+        GIVEN: The user provides otherwise valid registration data
+        WHEN: The user submits an invalid <field> equal to <value>
+        THEN: The registration fails and the system returns <expected_error>

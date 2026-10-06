@@ -25,7 +25,7 @@ export function mountForm(context: PageContext, operation: "register" | "login")
   const element = new AuthForm();
   const template = document.createElement("template");
   const names = operation === "register" ? ["email", "name", "password"] : ["email", "password"];
-  template.innerHTML = `<h1>${operation === "register" ? "Register" : "Login"}</h1><form>${names.map((name) => `<label>${name[0]!.toUpperCase() + name.slice(1)}<input name="${name}" type="${name === "password" ? "password" : name === "email" ? "email" : "text"}" required autocomplete="${name === "password" ? (operation === "register" ? "new-password" : "current-password") : name}"><small data-field="${name}" role="status"></small></label>`).join("")}<button type="submit">${operation === "register" ? "Register" : "Login"}</button><p role="status" id="form-result"></p></form>`;
+  template.innerHTML = `<h1>${operation === "register" ? "Register" : "Login"}</h1><form>${names.map((name) => `<label>${name[0]!.toUpperCase() + name.slice(1)}<input name="${name}" type="${name === "password" ? "password" : name === "email" ? "email" : "text"}" required autocomplete="${name === "password" ? (operation === "register" ? "new-password" : "current-password") : name}"${name === "password" && operation === "register" ? ` minlength="4"` : ""}><small data-field="${name}" role="status"></small></label>`).join("")}<button type="submit">${operation === "register" ? "Register" : "Login"}</button><p role="status" id="form-result"></p></form>`;
   element.render(template);
   context.outlet.append(element);
   const form = element.querySelector("form");

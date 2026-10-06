@@ -36,3 +36,17 @@ void test("auth modes normalize identity while preserving original password", ()
   assert.equal(login.name, "");
   assert.equal(login.password, input.password);
 });
+void test("register rejects a password shorter than four characters", () => {
+  const input = { email: "user@example.test", name: "Name", password: "123" };
+  assert.throws(
+    () => readAuthInput(input, true),
+    (error: unknown) => {
+      assert.ok(error instanceof ExpectedError);
+      assert.equal(error.details.status, 400);
+      assert.deepEqual(error.details.fields, { password: "Password too short" });
+      return true;
+    },
+  );
+  assert.equal(readAuthInput({ ...input, password: "1234" }, true).password, "1234");
+  assert.equal(readAuthInput(input, false).password, "123");
+});

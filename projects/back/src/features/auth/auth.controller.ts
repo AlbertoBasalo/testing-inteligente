@@ -3,6 +3,7 @@ import { requireText } from "../../shared/text.check.ts";
 import { ExpectedError } from "../../shared/error.type.ts";
 
 type AuthField = "email" | "name" | "password";
+const minimumPasswordLength = 4;
 type FieldResult = { value: string } | { fields: Record<string, string> | undefined };
 function readAuthText(input: { value: unknown; field: AuthField }): FieldResult {
   try {
@@ -12,10 +13,18 @@ function readAuthText(input: { value: unknown; field: AuthField }): FieldResult 
     return { fields: error.details.fields };
   }
 }
-function collectAuthFields(input: { body: Record<string, unknown>; names: readonly AuthField[] }) {
-  const fields: Record<string, string> = {};
+function readPasswordFields(body: Record<string, unknown>): Record<string, string> {
+  const password = body.password;
+  const isTooShort = typeof password === "string" && password.length < minimumPasswordLength;
+  return isTooShort ? { password: "Password too short" } : {};
+}
+function collectAuthFields(input: { body: Record<string, unknown>; isRegister: boolean }) {
+  const names: readonly AuthField[] = input.isRegister
+    ? ["email", "name", "password"]
+    : ["email", "password"];
+  const fields: Record<string, string> = input.isRegister ? readPasswordFields(input.body) : {};
   const values: Record<string, string> = {};
-  for (const field of input.names) {
+  for (const field of names) {
     const result = readAuthText({ value: input.body[field], field });
     if ("value" in result) {
       values[field] = result.value;
@@ -30,10 +39,7 @@ function collectAuthFields(input: { body: Record<string, unknown>; names: readon
 export function readAuthInput(input: unknown, isRegister: boolean) {
   const body =
     typeof input === "object" && input !== null ? (input as Record<string, unknown>) : {};
-  const values = collectAuthFields({
-    body,
-    names: isRegister ? ["email", "name", "password"] : ["email", "password"],
-  });
+  const values = collectAuthFields({ body, isRegister });
   return {
     email: new Email(values.email),
     name: values.name ?? "",
