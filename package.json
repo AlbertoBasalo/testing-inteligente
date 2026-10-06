@@ -1,0 +1,24 @@
+{
+  "name": "lab-testing-inteligente",
+  "description": "Testing Inteligente Laboratory",
+  "author": {
+    "name": "Alberto Basalo",
+    "url": "https://albertobasalo.dev"
+  },
+  "homepage": "https://aicode.academy/",
+  "repository": {
+    "url": "https://github.com/AlbertoBasaloAcademy/lab-testing-inteligente.git"
+  },
+  "version": "0.7.0",
+  "private": true,
+  "scripts": {
+    "start": "",
+    "test": "",
+    "setup": "",
+    "reset": "",
+    "lint": "",
+    "unit": "",
+    "format": "",
+    "quality": ""
+  }
+}
