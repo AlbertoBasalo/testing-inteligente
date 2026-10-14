@@ -5,6 +5,9 @@ tmp/
 *.log
 data/
 
+# Node
+node_modules/
+
 # Secrets and credentials
 .env
 .env.*
