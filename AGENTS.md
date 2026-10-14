@@ -100,9 +100,7 @@ The operator uses front. Front gets data only from back.
 
 - MANDATORY: Preserve work; no secrets; no destructive commands.
 - Group related changes; keep commits small and focused.
-- Conventional commit, made with `node .agents/aidd/aidd.mjs commit "<message>" [<path>...]` so the journal records each milestone: `{feat|refactor|fix|chore|docs|test}(scope): {description}`
-- Branch naming: `{feat|fix|refactor|chore}/S{nnnn}-{slug}`
-- Never commit on the default branch: only `aidd release` and `aidd integrate` write there.
+- Conventional commit `{feat|refactor|fix|chore|docs|test}(scope): {description}`
 
 ---
 
