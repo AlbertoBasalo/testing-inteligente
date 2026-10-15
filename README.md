@@ -1,6 +1,6 @@
 # Testing Inteligente
 
-Pruebas e2e2 con inteligencia artificial y playwright.
+Pruebas e2e con inteligencia artificial y playwright.
 
 Documentación y demo práctica del curso.
 
@@ -22,20 +22,18 @@ cd projects/back && npm install && cd ../..
 cd projects/front && npm install && cd ../..
 cd e2e && npm install && npx playwright install chromium && cd ..
 
-# 2. Arrancar back y front (terminal aparte)
-npm start
-
-# 3. Ejecutar los tests
+# 2. Ejecutar los tests (arranca back y front y vacía la base de datos)
 cd e2e
-npm test              # headless
+npm test              # headless (o `npm test` en la raíz)
 npm run test:ui       # modo UI
 npm run test:headed   # con navegador visible
 npm run report        # abrir el último informe HTML
 npm run typecheck     # comprobar tipos
 ```
 
-- `npm run reset` (en la raíz, con los servidores parados) vacía la base de datos.
+- Si ya hay servidores arrancados (`npm start` en la raíz), los tests los reutilizan y la base de datos no se vacía. Para vaciarla: parar los servidores y `npm run reset` en la raíz.
 - `BASE_URL` cambia la URL del front (por defecto `http://localhost:4000`).
+- `API_URL` cambia la URL del back (por defecto `http://localhost:3000`); debe coincidir con `API_BASE_URL` del front.
 - Los tests están en `e2e/tests/*.spec.ts`; las especificaciones en `specs/*.spec.yaml`.
 
 ---

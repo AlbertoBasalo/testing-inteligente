@@ -1,8 +1,8 @@
 // Prepares the systems before the tests:
 // 1. back-api and front-web respond.
 // 2. front-web uses the same back-api as the tests.
-// 3. The database is fresh (webServer runs scripts/reset.mjs before it starts back-api).
-// 4. The seed data exists.
+// 3. The seed data exists.
+// webServer empties the database (see playwright.config.ts); this file only warns if it did not.
 // The tests never access the database. They use only the back-api endpoints.
 import { backUrl, frontUrl } from './env';
 import { seedUsers } from './seed-data';

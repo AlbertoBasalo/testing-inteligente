@@ -1,5 +1,14 @@
-import { expect, test } from '@playwright/test';
+import { expect, test, type Page } from '@playwright/test';
 import { existingUser } from '../core/seed-data';
+
+async function openRegisterPage(page: Page): Promise<void> {
+  await page.goto('/');
+  await page
+    .getByRole('navigation', { name: 'Main menu' })
+    .getByRole('link', { name: 'Register' })
+    .click();
+  await expect(page).toHaveURL(/\/register$/);
+}
 
 // Spec: specs/register-user.spec.yaml
 test.describe('R0001 Register a user with valid data', () => {
@@ -12,12 +21,7 @@ test.describe('R0001 Register a user with valid data', () => {
     };
 
     // GIVEN the user is not registered
-    await page.goto('/');
-    await page
-      .getByRole('navigation', { name: 'Main menu' })
-      .getByRole('link', { name: 'Register' })
-      .click();
-    await expect(page).toHaveURL(/\/register$/);
+    await openRegisterPage(page);
 
     // WHEN the user submits valid registration data
     await page.getByRole('textbox', { name: 'Email' }).fill(user.email);
@@ -36,12 +40,7 @@ test.describe('R0002 Reject registration with an existing email', () => {
     const expectedError = 'Email already registered';
 
     // GIVEN a registered user exists with this email
-    await page.goto('/');
-    await page
-      .getByRole('navigation', { name: 'Main menu' })
-      .getByRole('link', { name: 'Register' })
-      .click();
-    await expect(page).toHaveURL(/\/register$/);
+    await openRegisterPage(page);
 
     // WHEN another registration is attempted with this email
     await page.getByRole('textbox', { name: 'Email' }).fill(existingUser.email);
