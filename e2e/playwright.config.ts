@@ -1,12 +1,12 @@
 import { defineConfig, devices } from '@playwright/test';
+import { backUrl, frontUrl } from './core/env';
 
 const isCI = !!process.env.CI;
-const frontUrl = process.env.BASE_URL ?? 'http://localhost:4000';
-const backUrl = process.env.API_URL ?? 'http://localhost:3000';
 
 export default defineConfig({
   testDir: './tests',
   outputDir: './test-results',
+  globalSetup: './core/global-setup.ts',
   fullyParallel: true,
   forbidOnly: isCI,
   retries: isCI ? 2 : 0,
@@ -31,7 +31,8 @@ export default defineConfig({
   ],
   webServer: [
     {
-      command: 'npm start',
+      // Resets the database, then starts back-api. A reused server keeps its data.
+      command: 'node ../../scripts/reset.mjs && npm start',
       cwd: '../projects/back',
       url: `${backUrl}/api/health`,
       env: { PORT: new URL(backUrl).port },
