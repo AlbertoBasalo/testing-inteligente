@@ -20,38 +20,16 @@
 
 ## System
 
-Based on two projects, `back-api` and `front-web`.
+Based on two projects, a backend REST API in `projects/back` and a frontend web application in `projects/front`.
 
 ### Back API
-- `back-api` owns the data. Only it connects to persistence. 
+- `projects/back` owns the data. Only it connects to persistence. 
 - REST API: paths start with `/api`; a resource is a plural noun. JSON bodies, ISO 8601 dates, `Authorization: Bearer <token>`. Status codes: 200, 201, 204, 400, 401, 403, 404, 409, 413, 500. Every error has the body `{ "error": "<message>" }`; an input error adds `fields`. An error never shows a stack, SQL or a path.
 - Security: no secrets in the code or the repository; a password only as a salted hash; check each input at the edge.
 
 ### Front Web
-- `front-web` get data only through `back-api`.
+- `projects/front` get data only through `projects/back`.
 - Is a single-page application based on modern HTML, CSS and JavaScript. It uses the browser's native Web Components, and a minimal CSS framework. No framework, no library, no build step. 
-
-## Containers
-Each project has its own set of containers to group code by concern. 
-
-### Core
-
-- For starting the application, can not be used by any other container. 
-
-### Features
-
-- Can be api routes or web pages. Each solves a single business problem. 
-
-#### Layers
-
-Each feature follows a layered architecture, with the following layers:
-- `presentation`: the user interface, either a web page or an API route. It only calls `logic`.
-- `logic`: the business rules. It only calls `shared` and `data`.
-- `data`: the persistence layer. It only calls `shared`.
-
-### Shared
-
-- Utilities shared by any feature or core.
 
 ## Tests
 
