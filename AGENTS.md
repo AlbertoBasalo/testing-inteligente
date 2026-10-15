@@ -39,6 +39,20 @@ Based on two projects, a backend REST API in `projects/back` and a frontend web 
 
 ### E2E tests
 
+- The e2e tests are in `e2e/`. They use Playwright with TypeScript and the `chromium` project only.
+- Start the back and the front before you run the tests. Use `npm start` in the root folder.
+- To run the tests, go to `e2e/` and use `npm test`. To check the types, use `npm run typecheck`.
+- To empty the database, stop the servers. Then use `npm run reset` in the root folder.
+- Put each test in `e2e/tests/<name>.spec.ts`.
+- The base URL is `http://localhost:4000`. Use `BASE_URL` to change it. Use relative paths in `page.goto()`, for example `page.goto('/')`.
+- Find elements by role and accessible name, for example `getByRole('button', { name: 'Register' })`.
+- When a test comes from a spec in `specs/`, do these steps:
+  - Write the spec path in a comment: `// Spec: specs/<name>.spec.yaml`.
+  - Use the requirement ID and title in `test.describe()`, for example `R0001 Register a user with valid data`.
+  - Use the scenario ID and name in `test()`, for example `S001 Successful registration`.
+  - Write `// GIVEN`, `// WHEN` and `// THEN` comments for the steps.
+- Make each test independent. Use unique data, for example an email with `Date.now()`.
+
 
 
 ### Code complexity limits
