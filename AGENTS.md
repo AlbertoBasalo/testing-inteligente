@@ -12,7 +12,7 @@
 
 ### Git
 
-- Git remote: `https://github.com/AlbertoBasalo/testing-inteligente.git.` 
+- Git remote: `https://github.com/AlbertoBasaloAcademy/testing-inteligente.git.` 
 — branch default: `master`
 - MANDATORY: Preserve work; no secrets; no destructive commands.
 - Group related changes; keep commits small and focused.

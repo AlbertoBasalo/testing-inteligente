@@ -4,6 +4,8 @@ Pruebas e2e2 con inteligencia artificial y playwright.
 
 Documentación y demo práctica del curso.
 
+https://github.com/AlbertoBasaloAcademy/testing-inteligente
+
 ## Qué incluye
 
 | Proyecto | Carpeta  | Tecnología                                            | Puerto |
