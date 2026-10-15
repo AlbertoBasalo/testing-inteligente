@@ -23,8 +23,9 @@ cd projects/front && npm install && cd ../..
 cd e2e && npm install && npx playwright install chromium && cd ..
 
 # 2. Ejecutar los tests (arranca back y front y vacía la base de datos)
-cd e2e
-npm test              # headless (o `npm test` en la raíz)
+npm test              # headless desde la raíz
+cd e2e                # o bajando a la carpeta e2e
+npm test              # headless (igual que la raíz)
 npm run test:ui       # modo UI
 npm run test:headed   # con navegador visible
 npm run report        # abrir el último informe HTML
