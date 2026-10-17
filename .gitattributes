@@ -1,0 +1,10 @@
+# Store every text file with LF, in every tool and shell
+* text=auto eol=lf
+
+# Binary files
+*.pdf binary
+*.png binary
+*.jpg binary
+*.ico binary
+*.woff2 binary
+*.sqlite binary
