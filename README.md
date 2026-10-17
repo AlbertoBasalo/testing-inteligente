@@ -14,18 +14,30 @@ https://github.com/AlbertoBasaloAcademy/testing-inteligente
 | front    | `projects/front/` | TypeScript, Vite, Web Components nativos, Pico CSS    | 4000   |
 | e2e      | `e2e/`            | Playwright, TypeScript                                | —      |
 
-## Tests e2e
+## Instalar (una vez)
 
 ```bash
-# 1. Instalar (una vez)
+npm install
 cd projects/back && npm install && cd ../..
 cd projects/front && npm install && cd ../..
 cd e2e && npm install && npx playwright install chromium && cd ..
+```
 
-# 2. Ejecutar los tests (arranca back y front y vacía la base de datos)
-npm test              # headless desde la raíz
+## Tests unitarios
+
+```bash
+npm test              # desde la raíz: Vitest (vp test) en projects/back y projects/front
+```
+
+> Desde la raíz, `npm test` **ya no lanza los e2e**: solo los unitarios. Para los e2e usa `npm run test:e2e`.
+
+## Tests e2e
+
+```bash
+# Ejecutar los tests (arranca back y front y vacía la base de datos)
+npm run test:e2e      # headless desde la raíz
 cd e2e                # o bajando a la carpeta e2e
-npm test              # headless (igual que la raíz)
+npm test              # headless (igual que test:e2e en la raíz)
 npm run test:ui       # modo UI
 npm run test:headed   # con navegador visible
 npm run report        # abrir el último informe HTML
