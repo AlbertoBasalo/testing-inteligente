@@ -25,3 +25,12 @@ release. Add a tool name to select part of the graph. For example, run
 - [ ] If setup, runtime, or package-manager behavior looks wrong, run `vp env doctor` and include its output when asking for help.
 
 <!--VITE PLUS END-->
+
+# e2e
+
+Obey the root `AGENTS.md` (section "E2E tests"). This file adds only the e2e data.
+
+- Run the tests with `npm test` in `e2e/`, or `npm run test:e2e` in the root folder. Playwright runs them.
+- Do not use `vp test` in `e2e/`. Vitest cannot run Playwright specs.
+- To check the types, use `npm run typecheck` (`tsc --noEmit`).
+- To format and lint, use `vp check` in the root folder.

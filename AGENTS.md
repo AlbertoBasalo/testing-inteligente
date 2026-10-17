@@ -44,13 +44,14 @@ Based on two projects, a backend REST API in `projects/back` and a frontend web 
 
 ### Unit tests
 - Unit tests prove `logic`, at least one for each business rule, with a fake `data`. They also prove `shared` and `core`. They are fast and independent.
-- Written in TypeScript, and collocated near the code they test. They use Vitest through `vite-plus/test` (`expect`, `test`, `vi`) and no other framework or library. Run them with `vp test`.
+- Written in TypeScript, and collocated near the code they test. They use Vitest through `vite-plus/test` (`expect`, `test`, `vi`) and no other framework or library. To run them, use `npm test` in the root folder or in the project folder.
 
 ### E2E tests
 
 - The e2e tests are in `e2e/`. They use Playwright with TypeScript and the `chromium` project only.
 - To run the tests, use `npm run test:e2e` in the root folder, or `npm test` in `e2e/`. To check the types, use `npm run typecheck` in `e2e/`.
-- `npm test` starts the back and the front. Before it starts the back, it empties the database.
+- `npm run test:e2e` starts the back and the front. Before it starts the back, it empties the database.
+- Do not use `vp test` for the e2e tests. Vitest cannot run Playwright specs.
 - If the back and the front run already (`npm start` in the root folder), the tests use them. Then the database is not emptied. To empty it, stop the servers and use `npm run reset` in the root folder.
 - Put each test in `e2e/tests/<name>.spec.ts`.
 - The front URL is `http://localhost:4000`. Use `BASE_URL` to change it. Use relative paths in `page.goto()`, for example `page.goto('/')`.
@@ -65,8 +66,6 @@ Based on two projects, a backend REST API in `projects/back` and a frontend web 
   - Write `// GIVEN`, `// WHEN` and `// THEN` comments for the steps.
 - Make each test independent. Use unique data, for example an email with `Date.now()`.
 
-
-
 ### Code complexity limits
 
 No tool checks these limits. Review them manually.
@@ -80,8 +79,6 @@ No tool checks these limits. Review them manually.
 | Lines in a file | 128 | 256 |
 | Entries in a folder | 16 | — |
 
-
-
 ---
 
-> last updated: 2026-10-06T10:36:05+02:00
+> last updated: 2026-10-17

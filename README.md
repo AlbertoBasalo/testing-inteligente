@@ -27,7 +27,10 @@ cd e2e && npm install && npx playwright install chromium && cd ..
 
 ```bash
 npm test              # desde la raíz: Vitest (vp test) en projects/back y projects/front
+npx vp check          # formato, lint y tipos (vp check --fix para corregir)
 ```
+
+El hook pre-commit (`vp staged`) ejecuta `vp check --fix` y los tests unitarios relacionados con los ficheros del commit.
 
 > Desde la raíz, `npm test` **ya no lanza los e2e**: solo los unitarios. Para los e2e usa `npm run test:e2e`.
 
