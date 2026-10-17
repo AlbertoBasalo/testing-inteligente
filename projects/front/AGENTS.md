@@ -18,13 +18,13 @@ Obey the Blueprint of the root `AGENTS.md`. This file gives only the data of thi
 
 | Slot         | Blocks | Command                  | Tool                                                            |
 | ------------ | ------ | ------------------------ | --------------------------------------------------------------- |
-| `lint`       | Yes    | `npm run lint`           | oxlint, typeAware, typeCheck, oxlint-tsgolint, layer boundaries |
-| `format`     | No     | `npm run format`         | oxfmt                                                           |
+| `check`      | Yes    | `vp check`               | Vite+: Oxfmt, Oxlint (typeAware, typeCheck) from root config    |
+| `lint`       | Yes    | `npm run lint`           | vp lint (Oxlint)                                                |
+| `format`     | No     | `npm run format`         | vp fmt (Oxfmt)                                                  |
 | `upgrade`    | No     | `npm run upgrade`        | npm-check-updates and npm install                               |
-| `unit`       | No     | `npm test`               | node --test                                                     |
+| `unit`       | Yes    | `npm test`               | vp test (Vitest)                                                |
 | `start`      | No     | `npm run start`          | Vite JavaScript API                                             |
 | `acceptance` | Yes    | n/a: e2e owns acceptance | n/a                                                             |
-| `quality`    | No     | `npm run quality`        | oxlint with Blueprint complexity limits                         |
 
 ## 4 · Architecture
 
@@ -50,7 +50,7 @@ Obey the Blueprint of the root `AGENTS.md`. This file gives only the data of thi
 | facade                              | `src/features/{feature}/{feature}.api.ts`                                            | public functions and types       |
 | presentation / logic / data / types | `*.page.ts and *.component.ts / *.store.ts / *.client.ts / *.type.ts and *.value.ts` | file roles                       |
 | shared                              | `src/shared/, src/shared/components/ and src/shared/http/`                           | primitives and service contracts |
-| unit tests                          | `src/**/*.test.ts`                                                                   | node --test                      |
+| unit tests                          | `src/**/*.test.ts`                                                                   | vp test (Vitest)                 |
 
 ```text
 src/
@@ -86,9 +86,10 @@ The index of `shared`. Read it before you write a check or a conversion. Add eac
 
 ### Technology rules
 
-- Use TypeScript 7. Run type checks inside oxlint. Do not add a separate tsc check.
-- Use oxlint boundary overrides from the foundation assets. Use their e2e variant for e2e. Prove them with a forbidden import.
-- Use oxfmt. Upgrade all dependencies and the lockfile through npm-check-updates.
+- Use TypeScript 7. Run type checks inside `vp check` (Oxlint typeCheck). Do not add a separate tsc check.
+- Keep the Vite+ configuration in the root `vite.config.ts` (`lint`, `fmt`, `staged`, `test.projects`). The local `vite.config.ts` only names the test project and its `include`.
+- Use `vp fmt` (Oxfmt). Upgrade all dependencies and the lockfile through npm-check-updates.
+- Write unit tests with `expect`, `test` and `vi` from `vite-plus/test`. Do not import from `vitest` or `node:test`.
 - Use strict compiler settings. Use erasable TypeScript that Node.js can run directly.
 - Use native custom elements and `<template>` in the light DOM. Do not use Shadow DOM.
 - Use Navigation API and URLPattern. Import each page dynamically through the manifest. Do not add a framework or polyfill.

@@ -31,16 +31,25 @@ Based on two projects, a backend REST API in `projects/back` and a frontend web 
 - `projects/front` get data only through `projects/back`.
 - Is a single-page application based on modern HTML, CSS and JavaScript. It uses the browser's native Web Components, and a minimal CSS framework. Vite serves it. No UI framework, no UI library.
 
+## Tooling (Vite+)
+
+- The root, `projects/back`, `projects/front` and `e2e/` use Vite+ (`vp`). The root `package.json` has `"type": "module"`.
+- The root `vite.config.ts` holds the shared configuration: `lint` (Oxlint, typeAware, typeCheck), `fmt` (Oxfmt), `staged` and `test.projects`.
+- Each project has a local `vite.config.ts` with a unique `test.name` (`back`, `front`) and `test.include`.
+- To format, lint and check the types, use `vp check` (`vp check --fix` to fix). Do not add a separate `tsc` check, except `npm run typecheck` in `e2e/`.
+- To run all the unit tests, use `npm test` (`vp test --run`) in the root folder. It runs `projects/*` only, not the e2e tests.
+- The pre-commit hook (`.vite-hooks/pre-commit`) runs `vp staged`: `vp check --fix` on all staged files and `vp test related --run` on staged `.ts` files. A failure stops the commit.
+
 ## Tests
 
 ### Unit tests
 - Unit tests prove `logic`, at least one for each business rule, with a fake `data`. They also prove `shared` and `core`. They are fast and independent.
-- Written in typescript, and collocated near the code they test. They use `node:test` and no other framework or library. 
+- Written in TypeScript, and collocated near the code they test. They use Vitest through `vite-plus/test` (`expect`, `test`, `vi`) and no other framework or library. Run them with `vp test`.
 
 ### E2E tests
 
 - The e2e tests are in `e2e/`. They use Playwright with TypeScript and the `chromium` project only.
-- To run the tests, go to `e2e/` and use `npm test`. To check the types, use `npm run typecheck`.
+- To run the tests, use `npm run test:e2e` in the root folder, or `npm test` in `e2e/`. To check the types, use `npm run typecheck` in `e2e/`.
 - `npm test` starts the back and the front. Before it starts the back, it empties the database.
 - If the back and the front run already (`npm start` in the root folder), the tests use them. Then the database is not emptied. To empty it, stop the servers and use `npm run reset` in the root folder.
 - Put each test in `e2e/tests/<name>.spec.ts`.
@@ -59,6 +68,8 @@ Based on two projects, a backend REST API in `projects/back` and a frontend web 
 
 
 ### Code complexity limits
+
+No tool checks these limits. Review them manually.
 
 | Limit | Code | Tests (all `e2e` files) |
 | --- | --- | --- |

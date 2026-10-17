@@ -1,52 +1,50 @@
-import assert from "node:assert/strict";
-import test from "node:test";
+import { expect, test } from "vite-plus/test";
 import { readAuthInput } from "./auth.controller.ts";
 import { ExpectedError } from "../../shared/error.type.ts";
 
-void test("auth input aggregates every field error for register and login", () => {
+function catchDetails(action: () => unknown) {
+  try {
+    action();
+  } catch (error) {
+    expect(error).toBeInstanceOf(ExpectedError);
+    return (error as ExpectedError).details;
+  }
+  throw new Error("Expected an error");
+}
+
+test("auth input aggregates every field error for register and login", () => {
   for (const isRegister of [true, false]) {
-    assert.throws(
-      () => readAuthInput({ email: 3, name: " ", password: "" }, isRegister),
-      (error: unknown) => {
-        assert.ok(error instanceof ExpectedError);
-        assert.equal(error.details.status, 400);
-        assert.deepEqual(
-          error.details.fields,
-          isRegister
-            ? {
-                email: "email is required",
-                name: "name is required",
-                password: "password is required",
-              }
-            : { email: "email is required", password: "password is required" },
-        );
-        return true;
-      },
+    const details = catchDetails(() =>
+      readAuthInput({ email: 3, name: " ", password: "" }, isRegister),
+    );
+    expect(details.status).toBe(400);
+    expect(details.fields).toStrictEqual(
+      isRegister
+        ? {
+            email: "email is required",
+            name: "name is required",
+            password: "password is required",
+          }
+        : { email: "email is required", password: "password is required" },
     );
   }
 });
-void test("auth modes normalize identity while preserving original password", () => {
+test("auth modes normalize identity while preserving original password", () => {
   const input = { email: " USER@EXAMPLE.TEST ", name: " Name ", password: " secret " };
   const registered = readAuthInput(input, true);
   const login = readAuthInput(input, false);
-  assert.equal(registered.email.value, "user@example.test");
-  assert.equal(registered.name, "Name");
-  assert.equal(registered.password, " secret ");
-  assert.equal(login.email.value, registered.email.value);
-  assert.equal(login.name, "");
-  assert.equal(login.password, input.password);
+  expect(registered.email.value).toBe("user@example.test");
+  expect(registered.name).toBe("Name");
+  expect(registered.password).toBe(" secret ");
+  expect(login.email.value).toBe(registered.email.value);
+  expect(login.name).toBe("");
+  expect(login.password).toBe(input.password);
 });
-void test("register rejects a password shorter than four characters", () => {
+test("register rejects a password shorter than four characters", () => {
   const input = { email: "user@example.test", name: "Name", password: "123" };
-  assert.throws(
-    () => readAuthInput(input, true),
-    (error: unknown) => {
-      assert.ok(error instanceof ExpectedError);
-      assert.equal(error.details.status, 400);
-      assert.deepEqual(error.details.fields, { password: "Password too short" });
-      return true;
-    },
-  );
-  assert.equal(readAuthInput({ ...input, password: "1234" }, true).password, "1234");
-  assert.equal(readAuthInput(input, false).password, "123");
+  const details = catchDetails(() => readAuthInput(input, true));
+  expect(details.status).toBe(400);
+  expect(details.fields).toStrictEqual({ password: "Password too short" });
+  expect(readAuthInput({ ...input, password: "1234" }, true).password).toBe("1234");
+  expect(readAuthInput(input, false).password).toBe("123");
 });

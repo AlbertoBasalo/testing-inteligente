@@ -1,17 +1,16 @@
-import assert from "node:assert/strict";
-import test from "node:test";
+import { expect, test } from "vite-plus/test";
 import { createSubmission, createSessionStore } from "./auth.store.ts";
 
-void test("submission state prevents overlapping requests and permits retry", () => {
+test("submission state prevents overlapping requests and permits retry", () => {
   const submission = createSubmission();
-  assert.equal(submission.begin(), true);
-  assert.equal(submission.begin(), false);
-  assert.equal(submission.isSending, true);
+  expect(submission.begin()).toBe(true);
+  expect(submission.begin()).toBe(false);
+  expect(submission.isSending).toBe(true);
   submission.finish();
-  assert.equal(submission.begin(), true);
+  expect(submission.begin()).toBe(true);
 });
 
-void test("session logic uses fake persistence and notifications without browser globals", () => {
+test("session logic uses fake persistence and notifications without browser globals", () => {
   const writes: string[] = [];
   let removed = 0;
   let notifications = 0;
@@ -37,17 +36,17 @@ void test("session logic uses fake persistence and notifications without browser
     role: "user" as const,
     createdAt: "2026-10-06T00:00:00.000Z",
   };
-  assert.equal(store.readUser(), undefined);
+  expect(store.readUser()).toBe(undefined);
   store.setSession({ token: "opaque-token", user });
-  assert.deepEqual(writes, ["opaque-token"]);
-  assert.equal(store.readUser(), user);
-  assert.equal(notifications, 1);
+  expect(writes).toStrictEqual(["opaque-token"]);
+  expect(store.readUser()).toBe(user);
+  expect(notifications).toBe(1);
   store.clearSession();
-  assert.equal(removed, 1);
-  assert.equal(store.readUser(), undefined);
-  assert.equal(notifications, 2);
+  expect(removed).toBe(1);
+  expect(store.readUser()).toBe(undefined);
+  expect(notifications).toBe(2);
   store.restoreUser(user);
-  assert.equal(store.readUser(), user);
-  assert.deepEqual(writes, ["opaque-token"]);
-  assert.equal(notifications, 3);
+  expect(store.readUser()).toBe(user);
+  expect(writes).toStrictEqual(["opaque-token"]);
+  expect(notifications).toBe(3);
 });

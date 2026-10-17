@@ -5,12 +5,11 @@
   "type": "module",
   "scripts": {
     "start": "node server.ts",
-    "test": "node --test src/**/*.test.ts",
-    "build": "vite build",
-    "lint": "oxlint src server.ts",
-    "format": "oxfmt .",
-    "upgrade": "ncu -u && npm install",
-    "quality": "oxlint -c .oxlint.quality.json src server.ts"
+    "test": "vp test --run",
+    "build": "vp build",
+    "lint": "vp lint src server.ts",
+    "format": "vp fmt .",
+    "upgrade": "ncu -u && npm install"
   },
   "dependencies": {
     "@fontsource/anonymous-pro": "^5.3.0",
@@ -21,10 +20,11 @@
   "devDependencies": {
     "@types/node": "^26.6.4",
     "npm-check-updates": "^23.1.0",
-    "oxfmt": "^0.72.0",
-    "oxlint": "^1.87.0",
-    "oxlint-tsgolint": "^7.0.2003",
     "typescript": "^7.0.2",
-    "vite": "^8.3.3"
+    "vite": "npm:@voidzero-dev/vite-plus-core@1.3.0",
+    "vite-plus": "1.3.0"
+  },
+  "overrides": {
+    "vite": "npm:@voidzero-dev/vite-plus-core@1.3.0"
   }
 }

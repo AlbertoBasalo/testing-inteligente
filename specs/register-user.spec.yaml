@@ -15,7 +15,7 @@ requirements:
         data:
           username: John Doe
           email: john@example.com
-          password: SecurePassword123!        
+          password: SecurePassword123!
 
         GIVEN: The user is not registered
         WHEN: The user submits valid registration data
@@ -46,7 +46,6 @@ requirements:
         GIVEN: A registered user exists with email <email>
         WHEN: Another registration is attempted with email <email>
         THEN: The registration fails and the system returns <expected_error>
-
 
   - id: R0003
     title: Reject registration with invalid data

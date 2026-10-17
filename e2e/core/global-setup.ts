@@ -4,8 +4,8 @@
 // 3. The seed data exists.
 // webServer empties the database (see playwright.config.ts); this file only warns if it did not.
 // The tests never access the database. They use only the back-api endpoints.
-import { backUrl, frontUrl } from './env';
-import { seedUsers } from './seed-data';
+import { backUrl, frontUrl } from "./env";
+import { seedUsers } from "./seed-data";
 
 const START_HINT = 'Run "npm start" in the root folder, or let Playwright start the servers.';
 
@@ -25,7 +25,7 @@ async function readJson(url: string): Promise<Record<string, unknown>> {
 
 async function checkBack(): Promise<number> {
   const health = await readJson(`${backUrl}/api/health`);
-  if (health.status !== 'ok') throw new Error(`back-api is not healthy: ${JSON.stringify(health)}`);
+  if (health.status !== "ok") throw new Error(`back-api is not healthy: ${JSON.stringify(health)}`);
   return Number(health.runs);
 }
 
@@ -36,7 +36,7 @@ async function checkFront(): Promise<void> {
   if (config.apiBaseUrl !== backUrl) {
     throw new Error(
       `front-web uses back-api ${String(config.apiBaseUrl)}, but the tests use ${backUrl}. ` +
-        'Set the same URL in API_BASE_URL (front-web) and API_URL (e2e).',
+        "Set the same URL in API_BASE_URL (front-web) and API_URL (e2e).",
     );
   }
 }
@@ -52,8 +52,8 @@ function warnIfNotReset(runs: number): void {
 
 async function seedUser(user: (typeof seedUsers)[number]): Promise<void> {
   const response = await request(`${backUrl}/api/auth/register`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
     body: JSON.stringify(user),
   });
   // 409: the user exists from an earlier run. That is the state we need.

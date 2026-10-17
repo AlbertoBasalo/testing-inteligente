@@ -1,7 +1,6 @@
-import assert from "node:assert/strict";
-import test from "node:test";
+import { expect, test } from "vite-plus/test";
 import { escapeHtml } from "./html.escape.ts";
 
-void test("escapeHtml protects text and quoted attributes", () => {
-  assert.equal(escapeHtml("<script>\"&'"), "&lt;script&gt;&quot;&amp;&#39;");
+test("escapeHtml protects text and quoted attributes", () => {
+  expect(escapeHtml("<script>\"&'")).toBe("&lt;script&gt;&quot;&amp;&#39;");
 });

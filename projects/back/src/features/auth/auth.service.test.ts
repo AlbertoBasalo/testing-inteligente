@@ -1,5 +1,4 @@
-import assert from "node:assert/strict";
-import test from "node:test";
+import { expect, test } from "vite-plus/test";
 import { DatabaseSync } from "node:sqlite";
 import express from "express";
 import request from "supertest";
@@ -11,7 +10,7 @@ import { createAuthService } from "./auth.service.ts";
 import { Email } from "../../shared/email.value.ts";
 import { tokenHash } from "./auth.password.service.ts";
 
-void test("credentials are salted and only token hash is stored; expired session is invalid", async () => {
+test("credentials are salted and only token hash is stored; expired session is invalid", async () => {
   const database = new DatabaseSync(":memory:");
   migrateDatabase(database);
   const auth = createAuthService({
@@ -22,22 +21,20 @@ void test("credentials are salted and only token hash is stored; expired session
   await auth.register({ email, name: "Unit", password: "password" });
   const logged = await auth.login({ email, password: "password" });
   const row = database.prepare("SELECT * FROM sessions").get()!;
-  assert.equal(row.tokenHash, tokenHash(logged.token));
-  assert.equal(Object.values(row).includes(logged.token), false);
-  assert.ok(auth.resolve(logged.token));
+  expect(row.tokenHash).toBe(tokenHash(logged.token));
+  expect(Object.values(row).includes(logged.token)).toBe(false);
+  expect(auth.resolve(logged.token)).toBeTruthy();
   database.exec("UPDATE sessions SET expiresAt = '2000-01-01T00:00:00.000Z'");
-  assert.equal(auth.resolve(logged.token), undefined);
-  assert.match(
-    String(database.prepare("SELECT passwordHash FROM users").get()?.passwordHash),
+  expect(auth.resolve(logged.token)).toBe(undefined);
+  expect(String(database.prepare("SELECT passwordHash FROM users").get()?.passwordHash)).toMatch(
     /^scrypt\$131072\$8\$1\$/,
   );
-  await assert.rejects(
+  await expect(
     auth.login({ email: new Email("unknown@example.test"), password: "wrong" }),
-    /Invalid credentials/,
-  );
+  ).rejects.toThrow(/Invalid credentials/);
   database.close();
 });
-void test("registration is protected unless marked public", async () => {
+test("registration is protected unless marked public", async () => {
   const application = express();
   mountRegistrations(application, {
     resolve: () => undefined,
@@ -54,5 +51,5 @@ void test("registration is protected unless marked public", async () => {
   });
   completeServer(application);
   const response = await request(application).get("/api/test");
-  assert.equal(response.status, 401);
+  expect(response.status).toBe(401);
 });

@@ -1,11 +1,11 @@
-import assert from "node:assert/strict";
-import test from "node:test";
+import { expect, test, vi } from "vite-plus/test";
 import type { Server } from "node:http";
 import type { DatabaseSync } from "node:sqlite";
 import { registerShutdown } from "./shutdown.ts";
 
-void test("timeout and late close use one finalizer and keep failure", async (context) => {
-  context.mock.timers.enable({ apis: ["setTimeout"] });
+test("timeout and late close use one finalizer and keep failure", async () => {
+  vi.useFakeTimers({ toFake: ["setTimeout", "clearTimeout"] });
+  vi.spyOn(process, "disconnect").mockImplementation(() => {});
   const listeners = process.listeners("message");
   const previousCode = process.exitCode;
   let closes = 0;
@@ -29,14 +29,16 @@ void test("timeout and late close use one finalizer and keep failure", async (co
   });
   const stop = process.listeners("message").find((listener) => !listeners.includes(listener))!;
   stop.call(process, "shutdown", undefined);
-  context.mock.timers.tick(5000);
-  assert.equal(forced, 1);
-  assert.equal(closes, 1);
-  assert.equal(process.exitCode, 1);
+  vi.advanceTimersByTime(5000);
+  expect(forced).toBe(1);
+  expect(closes).toBe(1);
+  expect(process.exitCode).toBe(1);
   closeCallback?.();
   await Promise.resolve();
-  assert.equal(closes, 1);
-  assert.equal(process.exitCode, 1);
+  expect(closes).toBe(1);
+  expect(process.exitCode).toBe(1);
   process.removeListener("message", stop);
   process.exitCode = previousCode;
+  vi.useRealTimers();
+  vi.restoreAllMocks();
 });
